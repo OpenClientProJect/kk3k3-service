@@ -75,9 +75,6 @@ public class VideoServiceImpl implements VideoService {
         HashMap<String, Object> videoInfoMap = new HashMap<>();
         Video video = videoMapper.selectById(id);
         videoInfoMap.put("video", video);
-
-        User userInfo = userMapper.findById(video.getUserId());
-        videoInfoMap.put("userInfo", userInfo);
         return videoInfoMap;
     }
     

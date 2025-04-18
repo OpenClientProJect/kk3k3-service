@@ -45,7 +45,7 @@
     
     <!-- 根据ID查询视频 -->
     <select id="selectById" resultType="com.ligg.entity.Video">
-        SELECT <include refid="Base_Column_List" />
+        SELECT *
         FROM video
         WHERE id = #{id}
     </select>

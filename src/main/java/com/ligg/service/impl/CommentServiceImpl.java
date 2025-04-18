@@ -102,14 +102,7 @@ public class CommentServiceImpl implements CommentService {
                 comment.setUserAvatar(user.getAvatarUrl());
             }
             
-            // 设置是否已点赞
-            if (userId != null) {
-                boolean liked = commentLikeMapper.countByCommentIdAndUserId(comment.getId(), userId) > 0;
-                comment.setLiked(liked);
-            } else {
-                comment.setLiked(false);
-            }
-            
+
             // 获取回复列表
             List<Comment> replies = commentMapper.findRepliesByParentId(comment.getId());
             if (replies != null && !replies.isEmpty()) {

@@ -22,8 +22,7 @@
 
     <!-- 根据ID查询用户 -->
     <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long">
-        SELECT 
-        <include refid="Base_Column_List" />
+        SELECT *
         FROM user
         WHERE id = #{id}
     </select>
