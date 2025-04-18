@@ -19,8 +19,7 @@ public interface AdminUserMapper {
     /**
      * 更新管理员登录信息
      * @param id 管理员ID
-     * @param ip 登录IP
      * @return 影响行数
      */
-    int updateLoginInfo(@Param("id") Long id, @Param("ip") String ip);
+    int updateLoginInfo(@Param("id") Long id);
 } 

@@ -30,7 +30,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     @Override
     @Transactional
-    public AdminInfoDTO login(AdminLoginDTO loginDTO, String ip) {
+    public AdminInfoDTO login(AdminLoginDTO loginDTO) {
         // 查询管理员信息
         AdminUser admin = adminUserMapper.selectByUsername(loginDTO.getUsername());
         if (admin == null) {
@@ -48,15 +48,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         }
         
         // 更新登录信息
-        adminUserMapper.updateLoginInfo(admin.getId(), ip);
-        
-        // 记录登录日志
-        AdminLog log = new AdminLog();
-        log.setAdminId(admin.getId());
-        log.setOperation("LOGIN");
-        log.setContent("管理员登录");
-        log.setIp(ip);
-        adminLogMapper.insert(log);
+        adminUserMapper.updateLoginInfo(admin.getId());
         
         // 生成token
         String token = jwtUtils.generateToken(admin);

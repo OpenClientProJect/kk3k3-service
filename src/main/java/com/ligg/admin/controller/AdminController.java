@@ -30,34 +30,13 @@ public class AdminController {
             return Result.error("用户名和密码不能为空");
         }
 
-        // 获取客户端IP
-        String ip = getClientIp(request);
-        
+
         // 登录
-        AdminInfoDTO adminInfo = adminUserService.login(loginDTO, ip);
+        AdminInfoDTO adminInfo = adminUserService.login(loginDTO);
         if (adminInfo == null) {
             return Result.error("用户名或密码错误");
         }
         
         return Result.success(adminInfo);
-    }
-
-    /**
-     * 获取客户端IP
-     * @param request 请求对象
-     * @return 客户端IP
-     */
-    private String getClientIp(HttpServletRequest request) {
-        String ip = request.getHeader("X-Forwarded-For");
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
     }
 }
