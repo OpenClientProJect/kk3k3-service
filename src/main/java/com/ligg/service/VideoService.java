@@ -70,20 +70,6 @@ public interface VideoService {
     boolean deleteVideo(Long id);
     
     /**
-     * 增加视频播放次数
-     * @param id 视频ID
-     * @return 是否成功
-     */
-    boolean incrementViews(Long id);
-    
-    /**
-     * 增加视频点赞数
-     * @param id 视频ID
-     * @return 是否成功
-     */
-    boolean incrementLikes(Long id);
-    
-    /**
      * 根据分类查询视频
      * @param category 分类
      * @param offset 偏移量
@@ -93,20 +79,12 @@ public interface VideoService {
     List<Video> getVideosByCategory(String category, int offset, int limit);
     
     /**
-     * 获取最新视频
-     * @param offset 偏移量
-     * @param limit 限制数量
+     * 获取视频列表
      * @return 视频列表
      */
-    List<Video> getLatestVideos(int offset, int limit);
+    List<Video> getLatestVideos();
     
-    /**
-     * 获取热门视频
-     * @param offset 偏移量
-     * @param limit 限制数量
-     * @return 视频列表
-     */
-    List<Video> getPopularVideos(int offset, int limit);
+
     
     /**
      * 搜索视频
@@ -122,7 +100,7 @@ public interface VideoService {
      * @return 视频总数
      */
     int countVideos();
-    
+
     /**
      * 统计分类下的视频数量
      * @param category 分类

@@ -70,23 +70,9 @@
         WHERE id = #{id}
     </delete>
     
-    <!-- 增加视频播放次数 -->
-    <update id="incrementViews">
-        UPDATE video
-        SET views = views + 1
-        WHERE id = #{id}
-    </update>
-    
-    <!-- 增加视频点赞数 -->
-    <update id="incrementLikes">
-        UPDATE video
-        SET likes = likes + 1
-        WHERE id = #{id}
-    </update>
-    
     <!-- 根据视频分类查询视频列表 -->
     <select id="selectByCategory" resultType="com.ligg.entity.Video">
-        SELECT <include refid="Base_Column_List" />
+        SELECT *
         FROM video
         WHERE category = #{category} AND status = #{status}
         ORDER BY create_time DESC
@@ -95,28 +81,16 @@
     
     <!-- 查询最新上传的视频 -->
     <select id="selectLatestVideos" resultType="com.ligg.entity.Video">
-        SELECT <include refid="Base_Column_List" />
+        SELECT *
         FROM video
-        WHERE status = #{status}
-        ORDER BY create_time DESC
-        LIMIT #{offset}, #{limit}
     </select>
     
-    <!-- 查询热门视频 -->
-    <select id="selectPopularVideos" resultType="com.ligg.entity.Video">
-        SELECT <include refid="Base_Column_List" />
-        FROM video
-        WHERE status = #{status}
-        ORDER BY views DESC
-        LIMIT #{offset}, #{limit}
-    </select>
-    
+
     <!-- 根据标题和描述进行模糊搜索 -->
     <select id="searchByKeyword" resultType="com.ligg.entity.Video">
-        SELECT <include refid="Base_Column_List" />
+        SELECT *
         FROM video
         WHERE (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
-        AND status = #{status}
         ORDER BY create_time DESC
         LIMIT #{offset}, #{limit}
     </select>
@@ -125,7 +99,7 @@
     <select id="countByCategory" resultType="int">
         SELECT COUNT(*)
         FROM video
-        WHERE category = #{category} AND status = #{status}
+        WHERE category = #{category}
     </select>
     
     <!-- 统计有效视频总数 -->
@@ -140,7 +114,6 @@
         SELECT COUNT(*)
         FROM video
         WHERE (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
-        AND status = #{status}
     </select>
 
     <!-- 搜索视频 -->

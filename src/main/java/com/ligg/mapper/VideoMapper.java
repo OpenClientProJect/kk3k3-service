@@ -55,20 +55,6 @@ public interface VideoMapper {
     int deleteById(Long id);
     
     /**
-     * 增加视频播放次数
-     * @param id 视频ID
-     * @return 影响的行数
-     */
-    int incrementViews(Long id);
-    
-    /**
-     * 增加视频点赞数
-     * @param id 视频ID
-     * @return 影响的行数
-     */
-    int incrementLikes(Long id);
-    
-    /**
      * 根据视频分类查询视频列表
      * @param category 视频分类
      * @param status 视频状态
@@ -80,23 +66,11 @@ public interface VideoMapper {
                                 @Param("offset") int offset, @Param("limit") int limit);
     
     /**
-     * 查询最新上传的视频
-     * @param status 视频状态
-     * @param offset 起始行
-     * @param limit 查询行数
      * @return 视频列表
      */
-    List<Video> selectLatestVideos(@Param("status") Integer status, @Param("offset") int offset, @Param("limit") int limit);
+    List<Video> selectLatestVideos();
     
-    /**
-     * 查询热门视频
-     * @param status 视频状态
-     * @param offset 起始行
-     * @param limit 查询行数
-     * @return 视频列表
-     */
-    List<Video> selectPopularVideos(@Param("status") Integer status, @Param("offset") int offset, @Param("limit") int limit);
-    
+
     /**
      * 根据标题和描述进行模糊搜索
      * @param keyword 关键词

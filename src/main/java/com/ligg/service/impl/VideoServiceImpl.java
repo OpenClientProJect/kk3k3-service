@@ -66,7 +66,7 @@ public class VideoServiceImpl implements VideoService {
             // 执行更新草稿表
             draftVideoMapper.update(video);
         }
-        
+
         return video;
     }
     
@@ -111,33 +111,17 @@ public class VideoServiceImpl implements VideoService {
     public boolean deleteVideo(Long id) {
         return videoMapper.deleteById(id) > 0;
     }
-    
-    @Override
-    @Transactional
-    public boolean incrementViews(Long id) {
-        return videoMapper.incrementViews(id) > 0;
-    }
-    
-    @Override
-    @Transactional
-    public boolean incrementLikes(Long id) {
-        return videoMapper.incrementLikes(id) > 0;
-    }
-    
+
     @Override
     public List<Video> getVideosByCategory(String category, int offset, int limit) {
         return videoMapper.selectByCategory(category, 1, offset, limit);
     }
     
     @Override
-    public List<Video> getLatestVideos(int offset, int limit) {
-        return videoMapper.selectLatestVideos(1, offset, limit);
+    public List<Video> getLatestVideos() {
+        return videoMapper.selectLatestVideos();
     }
-    
-    @Override
-    public List<Video> getPopularVideos(int offset, int limit) {
-        return videoMapper.selectPopularVideos(1, offset, limit);
-    }
+
     
     @Override
     public List<Video> searchVideos(String keyword, int offset, int limit) {
@@ -148,7 +132,7 @@ public class VideoServiceImpl implements VideoService {
     public int countVideos() {
         return videoMapper.countByStatus(1);
     }
-    
+
     @Override
     public int countVideosByCategory(String category) {
         return videoMapper.countByCategory(category, 1);

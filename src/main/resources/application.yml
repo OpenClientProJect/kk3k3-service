@@ -30,7 +30,7 @@ mybatis:
   mapper-locations: classpath:mapper/**/*.xml
   type-aliases-package: com.ligg.entity
   configuration:
-    map-underscore-to-camel-case: true
+    map-underscore-to-camel-case: true # 开启驼峰命名
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 # JWT配置
