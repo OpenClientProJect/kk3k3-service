@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ligg.mapper.DynamicCommentMapper">
+    <resultMap id="BaseResultMap" type="com.ligg.entity.DynamicComment">
+        <id column="id" property="id" />
+        <result column="dynamic_id" property="dynamicId" />
+        <result column="user_id" property="userId" />
+        <result column="content" property="content" />
+        <result column="parent_id" property="parentId" />
+        <result column="status" property="status" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+        id, dynamic_id, user_id, content, parent_id, status, create_time
+    </sql>
+    
+    <insert id="insert" parameterType="com.ligg.entity.DynamicComment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO dynamic_comment (dynamic_id, user_id, content, parent_id, status)
+        VALUES (#{dynamicId}, #{userId}, #{content}, #{parentId}, #{status})
+    </insert>
+    
+    <update id="update" parameterType="com.ligg.entity.DynamicComment">
+        UPDATE dynamic_comment
+        <set>
+            <if test="content != null">content = #{content},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <update id="deleteById">
+        UPDATE dynamic_comment
+        SET status = 0
+        WHERE id = #{id}
+    </update>
+    
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM dynamic_comment
+        WHERE id = #{id} AND status = 1
+    </select>
+    
+    <select id="selectByDynamicId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM dynamic_comment
+        WHERE dynamic_id = #{dynamicId} AND parent_id IS NULL AND status = 1
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+    
+    <select id="selectRepliesByParentId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM dynamic_comment
+        WHERE parent_id = #{parentId} AND status = 1
+        ORDER BY create_time ASC
+    </select>
+    
+    <select id="countByDynamicId" resultType="int">
+        SELECT COUNT(*)
+        FROM dynamic_comment
+        WHERE dynamic_id = #{dynamicId} AND status = 1
+    </select>
+</mapper> 

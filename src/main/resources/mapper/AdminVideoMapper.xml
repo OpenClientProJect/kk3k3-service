@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ligg.admin.mapper.AdminVideoMapper">
+
+    <!-- 获取待审核视频 -->
+    <select id="selectPendingVideos" resultType="java.util.HashMap">
+        SELECT
+            id, title, description, video_path as videoPath, video_url as videoUrl,
+            cover_path as coverPath, cover_url as coverUrl, duration, category,
+            user_id as userId, uploader_name as uploaderName, views, likes,
+            status, create_time as createTime, update_time as updateTime, tags
+        FROM
+            draft_video
+        WHERE
+            status = 2
+        ORDER BY
+            create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 统计待审核视频数量 -->
+    <select id="countPendingVideos" resultType="int">
+        SELECT COUNT(*) FROM draft_video WHERE status = 2
+    </select>
+
+    <!-- 获取所有视频（可筛选） -->
+    <select id="selectAllVideos" resultType="java.util.HashMap">
+        <if test="status == null or status == ''">
+            (SELECT
+                id, 
+                title COLLATE utf8mb4_general_ci as title, 
+                description COLLATE utf8mb4_general_ci as description, 
+                video_path COLLATE utf8mb4_general_ci as videoPath, 
+                video_url COLLATE utf8mb4_general_ci as videoUrl,
+                cover_path COLLATE utf8mb4_general_ci as coverPath, 
+                cover_url COLLATE utf8mb4_general_ci as coverUrl, 
+                duration, 
+                category COLLATE utf8mb4_general_ci as category,
+                user_id as userId, 
+                uploader_name COLLATE utf8mb4_general_ci as uploaderName, 
+                views, 
+                likes,
+                status, 
+                create_time as createTime, 
+                update_time as updateTime, 
+                tags COLLATE utf8mb4_general_ci as tags
+            FROM
+                video
+            <where>
+                <if test="keyword != null and keyword != ''">
+                    AND (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
+                </if>
+            </where>)
+            UNION ALL
+            (SELECT
+                id, 
+                title COLLATE utf8mb4_general_ci as title, 
+                description COLLATE utf8mb4_general_ci as description, 
+                video_path COLLATE utf8mb4_general_ci as videoPath, 
+                video_url COLLATE utf8mb4_general_ci as videoUrl,
+                cover_path COLLATE utf8mb4_general_ci as coverPath, 
+                cover_url COLLATE utf8mb4_general_ci as coverUrl, 
+                duration, 
+                category COLLATE utf8mb4_general_ci as category,
+                user_id as userId, 
+                uploader_name COLLATE utf8mb4_general_ci as uploaderName, 
+                views, 
+                likes,
+                status, 
+                create_time as createTime, 
+                update_time as updateTime, 
+                tags COLLATE utf8mb4_general_ci as tags
+            FROM
+                draft_video
+            <where>
+                <if test="keyword != null and keyword != ''">
+                    AND (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
+                </if>
+            </where>)
+        </if>
+        <if test="status != null and status != ''">
+            <choose>
+                <when test="status == 2">
+                    SELECT
+                        id, title, description, video_path as videoPath, video_url as videoUrl,
+                        cover_path as coverPath, cover_url as coverUrl, duration, category,
+                        user_id as userId, uploader_name as uploaderName, views, likes,
+                        status, create_time as createTime, update_time as updateTime, tags
+                    FROM
+                        draft_video
+                    <where>
+                        status = #{status}
+                        <if test="keyword != null and keyword != ''">
+                            AND (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
+                        </if>
+                    </where>
+                </when>
+                <otherwise>
+                    SELECT
+                        id, title, description, video_path as videoPath, video_url as videoUrl,
+                        cover_path as coverPath, cover_url as coverUrl, duration, category,
+                        user_id as userId, uploader_name as uploaderName, views, likes,
+                        status, create_time as createTime, update_time as updateTime, tags
+                    FROM
+                        video
+                    <where>
+                        status = #{status}
+                        <if test="keyword != null and keyword != ''">
+                            AND (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
+                        </if>
+                    </where>
+                </otherwise>
+            </choose>
+        </if>
+        ORDER BY createTime DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 统计符合条件的视频数量 -->
+    <select id="countAllVideos" resultType="int">
+        <if test="status == null or status == ''">
+            SELECT 
+                (SELECT COUNT(*) FROM video 
+                <if test="keyword != null and keyword != ''">
+                    WHERE (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
+                </if>
+                ) +
+                (SELECT COUNT(*) FROM draft_video
+                <if test="keyword != null and keyword != ''">
+                    WHERE (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
+                </if>
+                )
+        </if>
+        <if test="status != null and status != ''">
+            <choose>
+                <when test="status == 2">
+                    SELECT COUNT(*) FROM draft_video
+                    <where>
+                        status = #{status}
+                        <if test="keyword != null and keyword != ''">
+                            AND (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
+                        </if>
+                    </where>
+                </when>
+                <otherwise>
+                    SELECT COUNT(*) FROM video
+             +       <where>
+                        status = #{status}
+                        <if test="keyword != null and keyword != ''">
+                            AND (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
+                        </if>
+                    </where>
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+
+    <!-- 获取视频详情 -->
+    <select id="selectVideoById" resultType="java.util.HashMap">
+        SELECT
+            v.id, v.title, v.description, v.video_path as videoPath, v.video_url as videoUrl,
+            v.cover_path as coverPath, v.cover_url as coverUrl, v.duration, v.category,
+            v.user_id as userId, v.uploader_name as uploaderName, v.views, v.likes,
+            v.status, v.create_time as createTime, v.update_time as updateTime, v.tags,
+            u.username, u.avatar_url as avatarUrl, u.nickname
+        FROM
+            (
+                SELECT 
+                    id,
+                    title COLLATE utf8mb4_general_ci as title,
+                    description COLLATE utf8mb4_general_ci as description,
+                    video_path COLLATE utf8mb4_general_ci as video_path,
+                    video_url COLLATE utf8mb4_general_ci as video_url,
+                    cover_path COLLATE utf8mb4_general_ci as cover_path,
+                    cover_url COLLATE utf8mb4_general_ci as cover_url,
+                    duration,
+                    category COLLATE utf8mb4_general_ci as category,
+                    user_id,
+                    uploader_name COLLATE utf8mb4_general_ci as uploader_name,
+                    views,
+                    likes,
+                    status,
+                    create_time,
+                    update_time,
+                    tags COLLATE utf8mb4_general_ci as tags
+                FROM video WHERE id = #{id}
+                UNION ALL
+                SELECT 
+                    id,
+                    title COLLATE utf8mb4_general_ci as title,
+                    description COLLATE utf8mb4_general_ci as description,
+                    video_path COLLATE utf8mb4_general_ci as video_path,
+                    video_url COLLATE utf8mb4_general_ci as video_url,
+                    cover_path COLLATE utf8mb4_general_ci as cover_path,
+                    cover_url COLLATE utf8mb4_general_ci as cover_url,
+                    duration,
+                    category COLLATE utf8mb4_general_ci as category,
+                    user_id,
+                    uploader_name COLLATE utf8mb4_general_ci as uploader_name,
+                    views,
+                    likes,
+                    status,
+                    create_time,
+                    update_time,
+                    tags COLLATE utf8mb4_general_ci as tags
+                FROM draft_video WHERE id = #{id}
+            ) v
+        LEFT JOIN
+            user u ON v.user_id = u.id
+        LIMIT 1
+    </select>
+
+    <!-- 审核草稿视频 -->
+    <update id="updateDraftVideoStatus">
+        UPDATE draft_video
+        SET 
+            status = #{status},
+            <if test="rejectReason != null and rejectReason != ''">
+                reject_reason = #{rejectReason},
+            </if>
+            update_time = #{updateTime}
+        WHERE 
+            id = #{id}
+    </update>
+
+    <!-- 将通过审核的草稿视频移动到正式视频表 -->
+    <insert id="moveDraftToVideo">
+        INSERT INTO video (
+            title, description, video_path, video_url, cover_path, cover_url,
+            duration, category, user_id, uploader_name, views, likes,
+            status, create_time, update_time, tags
+        )
+        SELECT
+            title, description, video_path, video_url, cover_path, cover_url,
+            duration, category, user_id, uploader_name, views, likes,
+            status, create_time, update_time, tags
+        FROM
+            draft_video
+        WHERE
+            id = #{id}
+    </insert>
+    <!-- 插入视频 -->
+    <insert id="insert">
+        insert into video(title,description,video_path,video_url,cover_path,cover_url,
+                          duration,category,tags,create_time,update_time)
+        values(#{title},#{description},#{videoPath},#{videoUrl},#{coverPath},#{coverUrl},
+              #{duration},#{category},#{tags},NOW(),NOW())
+    </insert>
+
+    <!-- 删除视频 -->
+    <delete id="deleteVideo">
+        DELETE FROM video WHERE id = #{id}
+    </delete>
+
+    <!-- 删除草稿视频 -->
+    <delete id="deleteDraftVideo">
+        DELETE FROM draft_video WHERE id = #{id}
+    </delete>
+
+</mapper> 

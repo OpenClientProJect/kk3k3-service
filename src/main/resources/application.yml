@@ -1,0 +1,70 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/play_video?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 200309
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  # Redis配置
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+      timeout: 10000
+      # 如果需要密码，取消注释下一行
+      # password: 
+  # 文件上传配置
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+
+# MyBatis配置
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.ligg.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# JWT配置
+jwt:
+  # token有效期（单位：秒）
+  expiration: 86400  # 24小时
+  # token头部
+  header: Authorization
+  # token前缀
+  tokenPrefix: "Bearer "
+  # JWT密钥
+  secret: "your-256-bit-secret-key-for-jwt-token-signature-validation-12345"
+
+# 视频存储配置
+video:
+  # 视频上传路径
+  upload:
+    path: C:/Exploitation/JavaWeb/PlayVideo/upload/videos
+  # 封面上传路径
+  cover:
+    path: C:/Exploitation/JavaWeb/PlayVideo/upload/covers
+  # 视频访问URL前缀
+  access:
+    url: http://localhost:8080/videos
+
+# 动态内容上传路径
+upload:
+  path: C:/Exploitation/JavaWeb/PlayVideo/upload/images
+
+admin:
+  jwt:
+    # JWT密钥（生产环境请更换为复杂的随机字符串）
+    secret: LIGG_PlayVideo_Admin_JWT_Secret_Key_2023
+    # 过期时间，单位秒，默认2小时
+    expiration: 7200
+    # 签发者
+    issuer: play-video-admin

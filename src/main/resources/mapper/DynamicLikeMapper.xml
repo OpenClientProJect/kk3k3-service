@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ligg.mapper.DynamicLikeMapper">
+    <resultMap id="BaseResultMap" type="com.ligg.entity.DynamicLike">
+        <id column="id" property="id" />
+        <result column="dynamic_id" property="dynamicId" />
+        <result column="user_id" property="userId" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+        id, dynamic_id, user_id, create_time
+    </sql>
+    
+    <insert id="insert" parameterType="com.ligg.entity.DynamicLike" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO dynamic_like (dynamic_id, user_id)
+        VALUES (#{dynamicId}, #{userId})
+    </insert>
+    
+    <delete id="deleteByDynamicIdAndUserId">
+        DELETE FROM dynamic_like
+        WHERE dynamic_id = #{dynamicId} AND user_id = #{userId}
+    </delete>
+    
+    <select id="selectByDynamicIdAndUserId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM dynamic_like
+        WHERE dynamic_id = #{dynamicId} AND user_id = #{userId}
+        LIMIT 1
+    </select>
+    
+    <select id="countByDynamicId" resultType="int">
+        SELECT COUNT(*)
+        FROM dynamic_like
+        WHERE dynamic_id = #{dynamicId}
+    </select>
+</mapper> 

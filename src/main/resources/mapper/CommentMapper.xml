@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ligg.mapper.CommentMapper">
+    
+    <!-- 插入评论 -->
+    <insert id="insert" parameterType="com.ligg.entity.Comment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO comment (
+            video_id, user_id, content, likes, parent_id, create_time, update_time, status
+        ) VALUES (
+            #{videoId}, #{userId}, #{content}, #{likes}, #{parentId}, #{createTime}, #{updateTime}, #{status}
+        )
+    </insert>
+    
+    <!-- 根据ID查询评论 -->
+    <select id="findById" resultType="com.ligg.entity.Comment">
+        SELECT 
+            id, video_id AS videoId, user_id AS userId, content, likes, 
+            parent_id AS parentId, create_time AS createTime, update_time AS updateTime, status
+        FROM comment
+        WHERE id = #{id}
+    </select>
+    
+    <!-- 根据视频ID查询顶级评论 -->
+    <select id="findTopLevelByVideoId" resultType="com.ligg.entity.Comment">
+        SELECT 
+            id, video_id AS videoId, user_id AS userId, content, likes, 
+            parent_id AS parentId, create_time AS createTime, update_time AS updateTime, status
+        FROM comment
+        WHERE video_id = #{videoId} AND parent_id IS NULL AND status = 1
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+    
+    <!-- 根据父评论ID查询回复 -->
+    <select id="findRepliesByParentId" resultType="com.ligg.entity.Comment">
+        SELECT 
+            id, video_id AS videoId, user_id AS userId, content, likes, 
+            parent_id AS parentId, create_time AS createTime, update_time AS updateTime, status
+        FROM comment
+        WHERE parent_id = #{parentId} AND status = 1
+        ORDER BY create_time ASC
+    </select>
+    
+    <!-- 统计视频的评论数量 -->
+    <select id="countByVideoId" resultType="int">
+        SELECT COUNT(*)
+        FROM comment
+        WHERE video_id = #{videoId} AND status = 1
+    </select>
+    
+    <!-- 更新评论 -->
+    <update id="update" parameterType="com.ligg.entity.Comment">
+        UPDATE comment
+        SET 
+            content = #{content},
+            likes = #{likes},
+            update_time = #{updateTime},
+            status = #{status}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除评论（逻辑删除） -->
+    <update id="delete">
+        UPDATE comment
+        SET status = 0, update_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 增加评论点赞数 -->
+    <update id="incrementLikes">
+        UPDATE comment
+        SET likes = likes + 1, update_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 减少评论点赞数 -->
+    <update id="decrementLikes">
+        UPDATE comment
+        SET likes = GREATEST(0, likes - 1), update_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+</mapper> 
