@@ -1,13 +1,8 @@
 package com.ligg.controller.user;
 
 import com.ligg.entity.User;
-import com.ligg.entity.UserSubscription;
 import com.ligg.service.UserService;
-import com.ligg.service.UserSubscriptionService;
-import com.ligg.util.JwtTokenUtil;
 import com.ligg.util.ResponseResult;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +18,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * 用户控制器，处理用户信息相关操作
@@ -41,8 +33,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     
-    @Autowired
-    private UserSubscriptionService userSubscriptionService;
+
 
     @Value("${upload.path}")
     private String uploadPath;

@@ -71,20 +71,6 @@
         from video
     </select>
 
-    <!-- 审核草稿视频 -->
-    <update id="updateDraftVideoStatus">
-        UPDATE draft_video
-        SET 
-            status = #{status},
-            <if test="rejectReason != null and rejectReason != ''">
-                reject_reason = #{rejectReason},
-            </if>
-            update_time = #{updateTime}
-        WHERE 
-            id = #{id}
-    </update>
-
-
     <!-- 插入视频 -->
     <insert id="insert">
         insert into video(title,description,video_path,video_url,cover_path,cover_url,

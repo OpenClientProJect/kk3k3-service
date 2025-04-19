@@ -18,27 +18,6 @@ public interface VideoService {
      */
     HashMap<String, Object> getVideoById(Long id);
     
-    /**
-     * 根据用户ID查询所有视频列表（包括已发布和审核中的视频）
-     * @param userId 用户ID
-     * @return 视频列表
-     */
-    List<Video> getAllVideosByUserId(Long userId);
-    
-    /**
-     * 统计用户上传的所有视频数量（包括已发布和审核中的视频）
-     * @param userId 用户ID
-     * @return 视频数量
-     */
-    int countAllVideosByUserId(Long userId);
-    
-    /**
-     * 删除视频
-     * @param id 视频ID
-     * @return 是否成功
-     */
-    boolean deleteVideo(Long id);
-    
 
     /**
      * 获取视频列表
@@ -47,7 +26,6 @@ public interface VideoService {
     List<Video> getLatestVideos();
     
 
-    
     /**
      * 搜索视频
      * @param keyword 关键词

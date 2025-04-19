@@ -56,10 +56,6 @@ video:
   access:
     url: http://localhost:8080/videos
 
-# 动态内容上传路径
-upload:
-  path: C:/Exploitation/JavaWeb/PlayVideo/upload/images
-
 admin:
   jwt:
     # JWT密钥（生产环境请更换为复杂的随机字符串）

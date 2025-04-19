@@ -8,7 +8,6 @@
         <result column="password" property="password" />
         <result column="nickname" property="nickname" />
         <result column="avatar" property="avatar" />
-        <result column="status" property="status" />
         <result column="last_login_time" property="lastLoginTime" />
         <result column="last_login_ip" property="lastLoginIp" />
         <result column="create_time" property="createTime" />

@@ -9,75 +9,20 @@
         user_id, uploader_name, views, likes, status, create_time, update_time, tags
     </sql>
     
-    <!-- 插入视频记录 -->
-    <insert id="insert" parameterType="com.ligg.entity.Video" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO video (
-            title, description, video_path, video_url, cover_path, cover_url, duration, category,
-            user_id, uploader_name, views, likes, status, create_time, update_time, tags
-        ) VALUES (
-            #{title}, #{description}, #{videoPath}, #{videoUrl}, #{coverPath}, #{coverUrl},
-            #{duration}, #{category}, #{userId}, #{uploaderName}, #{views}, #{likes},
-            #{status}, #{createTime}, #{updateTime}, #{tags}
-        )
-    </insert>
-    
-    <!-- 更新视频记录 -->
-    <update id="update" parameterType="com.ligg.entity.Video">
-        UPDATE video
-        <set>
-            <if test="title != null">title = #{title},</if>
-            <if test="description != null">description = #{description},</if>
-            <if test="videoPath != null">video_path = #{videoPath},</if>
-            <if test="videoUrl != null">video_url = #{videoUrl},</if>
-            <if test="coverPath != null">cover_path = #{coverPath},</if>
-            <if test="coverUrl != null">cover_url = #{coverUrl},</if>
-            <if test="duration != null">duration = #{duration},</if>
-            <if test="category != null">category = #{category},</if>
-            <if test="uploaderName != null">uploader_name = #{uploaderName},</if>
-            <if test="views != null">views = #{views},</if>
-            <if test="likes != null">likes = #{likes},</if>
-            <if test="status != null">status = #{status},</if>
-            <if test="updateTime != null">update_time = #{updateTime},</if>
-            <if test="tags != null">tags = #{tags},</if>
-        </set>
-        WHERE id = #{id}
-    </update>
-    
+
     <!-- 根据ID查询视频 -->
     <select id="selectById" resultType="com.ligg.entity.Video">
         SELECT *
         FROM video
         WHERE id = #{id}
     </select>
-    
-    <!-- 根据用户ID查询视频列表 -->
-    <select id="selectByUserId" resultType="com.ligg.entity.Video">
-        SELECT *
-        FROM video
-        WHERE user_id = #{userId}
-    </select>
-    
-    <!-- 根据用户ID统计视频数量 -->
-    <select id="countByUserId" resultType="int">
-        SELECT COUNT(*)
-        FROM video
-        WHERE user_id = #{userId}
-    </select>
-    
+
+
     <!-- 根据ID删除视频 -->
     <delete id="deleteById">
         DELETE FROM video
         WHERE id = #{id}
     </delete>
-    
-    <!-- 根据视频分类查询视频列表 -->
-    <select id="selectByCategory" resultType="com.ligg.entity.Video">
-        SELECT *
-        FROM video
-        WHERE category = #{category} AND status = #{status}
-        ORDER BY create_time DESC
-        LIMIT #{offset}, #{limit}
-    </select>
     
     <!-- 查询最新上传的视频 -->
     <select id="selectLatestVideos" resultType="com.ligg.entity.Video">
@@ -94,21 +39,8 @@
         ORDER BY create_time DESC
         LIMIT #{offset}, #{limit}
     </select>
-    
-    <!-- 统计分类视频数量 -->
-    <select id="countByCategory" resultType="int">
-        SELECT COUNT(*)
-        FROM video
-        WHERE category = #{category}
-    </select>
-    
-    <!-- 统计有效视频总数 -->
-    <select id="countByStatus" resultType="int">
-        SELECT COUNT(*)
-        FROM video
-        WHERE status = #{status}
-    </select>
-    
+
+
     <!-- 统计搜索结果数量 -->
     <select id="countSearchResult" resultType="int">
         SELECT COUNT(*)

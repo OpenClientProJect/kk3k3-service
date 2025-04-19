@@ -40,21 +40,6 @@ public interface AdminVideoMapper {
     Map<String, Object> selectVideoById(@Param("id") Long id);
 
     /**
-     * 审核草稿视频
-     *
-     * @param id 视频ID
-     * @param status 审核状态
-     * @param rejectReason 拒绝原因
-     * @param updateTime 更新时间
-     * @return 影响行数
-     */
-    int updateDraftVideoStatus(
-            @Param("id") Long id,
-            @Param("status") Integer status,
-            @Param("rejectReason") String rejectReason,
-            @Param("updateTime") String updateTime);
-
-    /**
      * 删除视频
      *
      * @param id 视频ID
