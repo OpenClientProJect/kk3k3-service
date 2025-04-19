@@ -19,15 +19,10 @@ public interface AdminVideoService {
 
 
     /**
-     * 获取所有视频列表（可筛选）
-     *
-     * @param offset 偏移量
-     * @param limit 数量限制
-     * @param status 状态筛选（可为null）
-     * @param keyword 关键词（可为null）
+     * 获取所有视频列表
      * @return 视频列表及总数
      */
-    Map<String, Object> getAllVideos(int offset, int limit, Integer status, String keyword);
+    Map<String, Object> getAllVideos();
 
     /**
      * 获取视频详情

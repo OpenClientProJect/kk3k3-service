@@ -19,22 +19,11 @@ public class AdminVideoController {
 
 
     /**
-     * 获取所有视频列表（可筛选）
-     *
-     * @param page 页码
-     * @param size 每页数量
-     * @param status 状态筛选
-     * @param keyword 关键词搜索
-     * @return 视频列表和总数
+     * 获取所有视频列表
      */
     @GetMapping("/list")
-    public ResponseResult<Map<String, Object>> getAllVideos(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) Integer status,
-            @RequestParam(required = false) String keyword) {
-        int offset = (page - 1) * size;
-        Map<String, Object> result = adminVideoService.getAllVideos(offset, size, status, keyword);
+    public ResponseResult<Map<String, Object>> getAllVideos(){
+        Map<String, Object> result = adminVideoService.getAllVideos();
         return ResponseResult.success(result);
     }
 

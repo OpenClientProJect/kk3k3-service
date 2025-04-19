@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,14 +32,11 @@ public class AdminVideoServiceImpl implements AdminVideoService {
      * 获取所有视频列表（可筛选）
      */
     @Override
-    public Map<String, Object> getAllVideos(int offset, int limit, Integer status, String keyword) {
-        List<Map<String, Object>> videos = adminVideoMapper.selectAllVideos(offset, limit, status, keyword);
-        int total = adminVideoMapper.countAllVideos(status, keyword);
-        
+    public Map<String, Object> getAllVideos() {
+        List<Map<String, Object>> videos = adminVideoMapper.selectAllVideos();
+
         Map<String, Object> result = new HashMap<>();
         result.put("videos", videos);
-        result.put("total", total);
-        
         return result;
     }
 

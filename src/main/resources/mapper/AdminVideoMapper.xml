@@ -23,98 +23,8 @@
         SELECT COUNT(*) FROM draft_video WHERE status = 2
     </select>
 
-    <!-- 获取所有视频（可筛选） -->
-    <select id="selectAllVideos" resultType="java.util.HashMap">
-        <if test="status == null or status == ''">
-            (SELECT
-                id, 
-                title COLLATE utf8mb4_general_ci as title, 
-                description COLLATE utf8mb4_general_ci as description, 
-                video_path COLLATE utf8mb4_general_ci as videoPath, 
-                video_url COLLATE utf8mb4_general_ci as videoUrl,
-                cover_path COLLATE utf8mb4_general_ci as coverPath, 
-                cover_url COLLATE utf8mb4_general_ci as coverUrl, 
-                duration, 
-                category COLLATE utf8mb4_general_ci as category,
-                user_id as userId, 
-                uploader_name COLLATE utf8mb4_general_ci as uploaderName, 
-                views, 
-                likes,
-                status, 
-                create_time as createTime, 
-                update_time as updateTime, 
-                tags COLLATE utf8mb4_general_ci as tags
-            FROM
-                video
-            <where>
-                <if test="keyword != null and keyword != ''">
-                    AND (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
-                </if>
-            </where>)
-            UNION ALL
-            (SELECT
-                id, 
-                title COLLATE utf8mb4_general_ci as title, 
-                description COLLATE utf8mb4_general_ci as description, 
-                video_path COLLATE utf8mb4_general_ci as videoPath, 
-                video_url COLLATE utf8mb4_general_ci as videoUrl,
-                cover_path COLLATE utf8mb4_general_ci as coverPath, 
-                cover_url COLLATE utf8mb4_general_ci as coverUrl, 
-                duration, 
-                category COLLATE utf8mb4_general_ci as category,
-                user_id as userId, 
-                uploader_name COLLATE utf8mb4_general_ci as uploaderName, 
-                views, 
-                likes,
-                status, 
-                create_time as createTime, 
-                update_time as updateTime, 
-                tags COLLATE utf8mb4_general_ci as tags
-            FROM
-                draft_video
-            <where>
-                <if test="keyword != null and keyword != ''">
-                    AND (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
-                </if>
-            </where>)
-        </if>
-        <if test="status != null and status != ''">
-            <choose>
-                <when test="status == 2">
-                    SELECT
-                        id, title, description, video_path as videoPath, video_url as videoUrl,
-                        cover_path as coverPath, cover_url as coverUrl, duration, category,
-                        user_id as userId, uploader_name as uploaderName, views, likes,
-                        status, create_time as createTime, update_time as updateTime, tags
-                    FROM
-                        draft_video
-                    <where>
-                        status = #{status}
-                        <if test="keyword != null and keyword != ''">
-                            AND (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
-                        </if>
-                    </where>
-                </when>
-                <otherwise>
-                    SELECT
-                        id, title, description, video_path as videoPath, video_url as videoUrl,
-                        cover_path as coverPath, cover_url as coverUrl, duration, category,
-                        user_id as userId, uploader_name as uploaderName, views, likes,
-                        status, create_time as createTime, update_time as updateTime, tags
-                    FROM
-                        video
-                    <where>
-                        status = #{status}
-                        <if test="keyword != null and keyword != ''">
-                            AND (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
-                        </if>
-                    </where>
-                </otherwise>
-            </choose>
-        </if>
-        ORDER BY createTime DESC
-        LIMIT #{offset}, #{limit}
-    </select>
+    <!-- 获取所有视频 -->
+
 
     <!-- 统计符合条件的视频数量 -->
     <select id="countAllVideos" resultType="int">
@@ -208,6 +118,10 @@
         LEFT JOIN
             user u ON v.user_id = u.id
         LIMIT 1
+    </select>
+    <select id="selectAllVideos" resultType="java.util.Map">
+        select *
+        from video
     </select>
 
     <!-- 审核草稿视频 -->

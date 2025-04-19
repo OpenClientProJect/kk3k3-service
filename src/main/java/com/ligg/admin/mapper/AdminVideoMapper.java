@@ -30,19 +30,10 @@ public interface AdminVideoMapper {
     int countPendingVideos();
 
     /**
-     * 获取所有视频（可筛选）
-     *
-     * @param offset 偏移量
-     * @param limit 数量限制
-     * @param status 状态筛选（可为null）
-     * @param keyword 关键词（可为null）
+     * 获取所有视频
      * @return 视频列表
      */
-    List<Map<String, Object>> selectAllVideos(
-            @Param("offset") int offset,
-            @Param("limit") int limit,
-            @Param("status") Integer status,
-            @Param("keyword") String keyword);
+    List<Map<String, Object>> selectAllVideos();
 
     /**
      * 统计符合条件的视频数量
