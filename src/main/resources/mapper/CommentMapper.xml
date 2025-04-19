@@ -5,16 +5,16 @@
     <!-- 插入评论 -->
     <insert id="insert" parameterType="com.ligg.entity.Comment" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO comment (
-            video_id, user_id, content, likes, parent_id, create_time, update_time, status
+            video_id, user_id, content, parent_id, create_time, update_time
         ) VALUES (
-            #{videoId}, #{userId}, #{content}, #{likes}, #{parentId}, #{createTime}, #{updateTime}, #{status}
+            #{videoId}, #{userId}, #{content}, #{parentId}, #{createTime}, #{updateTime}
         )
     </insert>
     
     <!-- 根据ID查询评论 -->
     <select id="findById" resultType="com.ligg.entity.Comment">
         SELECT 
-            id, video_id AS videoId, user_id AS userId, content, likes, 
+            id, video_id AS videoId, user_id AS userId, content,
             parent_id AS parentId, create_time AS createTime, update_time AS updateTime, status
         FROM comment
         WHERE id = #{id}
@@ -23,7 +23,7 @@
     <!-- 根据视频ID查询顶级评论 -->
     <select id="findTopLevelByVideoId" resultType="com.ligg.entity.Comment">
         SELECT 
-            id, video_id AS videoId, user_id AS userId, content, likes, 
+            id, video_id AS videoId, user_id AS userId, content,
             parent_id AS parentId, create_time AS createTime, update_time AS updateTime, status
         FROM comment
         WHERE video_id = #{videoId} AND parent_id IS NULL AND status = 1
@@ -34,7 +34,7 @@
     <!-- 根据父评论ID查询回复 -->
     <select id="findRepliesByParentId" resultType="com.ligg.entity.Comment">
         SELECT 
-            id, video_id AS videoId, user_id AS userId, content, likes, 
+            id, video_id AS videoId, user_id AS userId, content,
             parent_id AS parentId, create_time AS createTime, update_time AS updateTime, status
         FROM comment
         WHERE parent_id = #{parentId} AND status = 1
@@ -53,7 +53,6 @@
         UPDATE comment
         SET 
             content = #{content},
-            likes = #{likes},
             update_time = #{updateTime},
             status = #{status}
         WHERE id = #{id}

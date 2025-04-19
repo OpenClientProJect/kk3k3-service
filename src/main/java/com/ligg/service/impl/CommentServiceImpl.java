@@ -42,17 +42,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public boolean addComment(Comment comment) {
-        // 检查视频是否存在
-        Video video = videoMapper.selectById(comment.getVideoId());
-        if (video == null || video.getStatus() != 1) {
-            log.warn("尝试评论不存在或已删除的视频, videoId={}", comment.getVideoId());
-            return false;
-        }
-        
+
         // 设置评论属性
         comment.setParentId(null); // 顶级评论
-        comment.setLikes(0);
-        comment.setStatus(1); // 正常状态
         comment.setCreateTime(LocalDateTime.now());
         comment.setUpdateTime(LocalDateTime.now());
         
@@ -62,13 +54,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public boolean replyComment(Comment comment) {
-        // 检查视频是否存在
-        Video video = videoMapper.selectById(comment.getVideoId());
-        if (video == null || video.getStatus() != 1) {
-            log.warn("尝试回复评论，但视频不存在或已删除, videoId={}", comment.getVideoId());
-            return false;
-        }
-        
+
         // 检查父评论是否存在
         Comment parentComment = commentMapper.findById(comment.getParentId());
         if (parentComment == null || parentComment.getStatus() != 1) {
@@ -77,8 +63,6 @@ public class CommentServiceImpl implements CommentService {
         }
         
         // 设置评论属性
-        comment.setLikes(0);
-        comment.setStatus(1); // 正常状态
         comment.setCreateTime(LocalDateTime.now());
         comment.setUpdateTime(LocalDateTime.now());
         
