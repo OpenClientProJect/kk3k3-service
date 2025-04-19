@@ -30,7 +30,6 @@ public class AdminStatsServiceImpl implements AdminStatsService {
                 allStats.put("lastWeekVideos", adminStatsMapper.getLastWeekVideos());
                 allStats.put("lastWeekUsers", adminStatsMapper.getLastWeekUsers());
                 allStats.put("categoryStats", adminStatsMapper.getVideoCategoryStats());
-                allStats.put("topUsers", adminStatsMapper.getTopActiveUsers());
                 allStats.put("topVideos", adminStatsMapper.getTopVideos());
                 return allStats;
             }
@@ -44,38 +43,18 @@ public class AdminStatsServiceImpl implements AdminStatsService {
         // 获取视频总数
         int totalVideos = adminStatsMapper.getTotalVideos();
         stats.put("totalVideos", totalVideos);
-        
-        // 获取待审核视频数量
-        int pendingVideos = adminStatsMapper.getPendingVideos();
-        stats.put("pendingVideos", pendingVideos);
-        
+
         // 获取用户总数
         int totalUsers = adminStatsMapper.getTotalUsers();
         stats.put("totalUsers", totalUsers);
-        
-        // 获取今日新增视频数
-        int todayNewVideos = adminStatsMapper.getTodayNewVideos();
-        stats.put("todayNewVideos", todayNewVideos);
-        
-        // 获取今日新增用户数
-        int todayNewUsers = adminStatsMapper.getTodayNewUsers();
-        stats.put("todayNewUsers", todayNewUsers);
-        
+
         // 获取最近7天每天新增视频数量
         stats.put("lastWeekVideos", adminStatsMapper.getLastWeekVideos());
         
         // 获取最近7天每天新增用户数量
         stats.put("lastWeekUsers", adminStatsMapper.getLastWeekUsers());
         
-        // 获取视频分类统计
-        stats.put("categoryStats", adminStatsMapper.getVideoCategoryStats());
-        
-        // 获取最活跃的TOP 10用户
-        stats.put("topUsers", adminStatsMapper.getTopActiveUsers());
-        
-        // 获取最热门的TOP 10视频
-        stats.put("topVideos", adminStatsMapper.getTopVideos());
-        
+
         return stats;
     }
 } 

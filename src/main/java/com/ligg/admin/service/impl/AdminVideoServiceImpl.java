@@ -58,10 +58,6 @@ public class AdminVideoServiceImpl implements AdminVideoService {
     public boolean deleteVideo(Long id) {
         // 先尝试删除正式视频
         int rows = adminVideoMapper.deleteVideo(id);
-        // 如果没有删除到正式视频，尝试删除草稿视频
-        if (rows == 0) {
-            rows = adminVideoMapper.deleteDraftVideo(id);
-        }
         return rows > 0;
     }
 } 

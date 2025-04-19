@@ -13,21 +13,6 @@ import java.util.Map;
 @Mapper
 public interface AdminVideoMapper {
 
-    /**
-     * 获取待审核视频（包括草稿视频表中状态为审核中的视频）
-     *
-     * @param offset 偏移量
-     * @param limit 数量限制
-     * @return 视频列表
-     */
-    List<Map<String, Object>> selectPendingVideos(@Param("offset") int offset, @Param("limit") int limit);
-
-    /**
-     * 统计待审核视频数量
-     *
-     * @return 数量
-     */
-    int countPendingVideos();
 
     /**
      * 获取所有视频
@@ -70,14 +55,6 @@ public interface AdminVideoMapper {
             @Param("updateTime") String updateTime);
 
     /**
-     * 将通过审核的草稿视频移动到正式视频表
-     *
-     * @param id 草稿视频ID
-     * @return 影响行数
-     */
-    int moveDraftToVideo(@Param("id") Long id);
-
-    /**
      * 删除视频
      *
      * @param id 视频ID
@@ -85,13 +62,6 @@ public interface AdminVideoMapper {
      */
     int deleteVideo(@Param("id") Long id);
 
-    /**
-     * 删除草稿视频
-     *
-     * @param id 草稿视频ID
-     * @return 影响行数
-     */
-    int deleteDraftVideo(@Param("id") Long id);
 
     /**
      * 插入视频

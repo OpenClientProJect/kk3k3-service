@@ -41,27 +41,5 @@ public interface CommentService {
      */
     boolean deleteComment(Long commentId, Long currentUserId);
     
-    /**
-     * 点赞评论
-     * @param commentId 评论ID
-     * @param userId 用户ID
-     * @return 点赞结果
-     */
-    boolean likeComment(Long commentId, Long userId);
-    
-    /**
-     * 取消点赞评论
-     * @param commentId 评论ID
-     * @param userId 用户ID
-     * @return 取消点赞结果
-     */
-    boolean unlikeComment(Long commentId, Long userId);
-    
-    /**
-     * 检查用户是否已点赞评论
-     * @param commentId 评论ID
-     * @param userId 用户ID
-     * @return 是否已点赞
-     */
-    boolean hasLiked(Long commentId, Long userId);
+
 } 

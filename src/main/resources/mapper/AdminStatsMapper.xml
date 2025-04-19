@@ -12,11 +12,7 @@
         SELECT COUNT(*) FROM user
     </select>
     
-    <!-- 获取待审核视频数量 -->
-    <select id="getPendingVideos" resultType="int">
-        SELECT COUNT(*) FROM draft_video WHERE status = 2
-    </select>
-    
+
     <!-- 获取今日新增视频数 -->
     <select id="getTodayNewVideos" resultType="int">
         SELECT COUNT(*) FROM video 
@@ -60,36 +56,13 @@
         GROUP BY category
     </select>
     
-    <!-- 获取最活跃的TOP 10用户 -->
-    <select id="getTopActiveUsers" resultType="java.util.HashMap">
-        <!-- 修复MySQL only_full_group_by模式下的问题 -->
-        SELECT 
-            user_id as userId, 
-            uploader_name as uploaderName, 
-            COUNT(*) as videoCount 
-        FROM video 
-        GROUP BY user_id, uploader_name 
-        ORDER BY videoCount DESC 
-        LIMIT 10
-    </select>
-    
-    <!-- 获取最热门的TOP 10视频 -->
-    <select id="getTopVideos" resultType="java.util.HashMap">
-        SELECT 
-            id, title, views, likes, 
-            user_id as userId, 
-            uploader_name as uploaderName 
-        FROM video 
-        ORDER BY views DESC 
-        LIMIT 10
-    </select>
-    
+
+
     <!-- 获取所有统计数据 -->
     <select id="getAllStats" resultType="java.util.HashMap">
         SELECT
             (SELECT COUNT(*) FROM video) as totalVideos,
             (SELECT COUNT(*) FROM user) as totalUsers,
-            (SELECT COUNT(*) FROM draft_video WHERE status = 2) as pendingVideos,
             (SELECT COUNT(*) FROM video WHERE DATE(create_time) = CURDATE()) as todayNewVideos,
             (SELECT COUNT(*) FROM user WHERE DATE(create_time) = CURDATE()) as todayNewUsers
     </select>

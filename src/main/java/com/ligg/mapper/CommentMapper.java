@@ -62,18 +62,4 @@ public interface CommentMapper {
      * @return 影响行数
      */
     int delete(Long id);
-    
-    /**
-     * 增加评论点赞数
-     * @param id 评论ID
-     * @return 影响行数
-     */
-    int incrementLikes(Long id);
-    
-    /**
-     * 减少评论点赞数
-     * @param id 评论ID
-     * @return 影响行数
-     */
-    int decrementLikes(Long id);
-} 
+}

@@ -65,18 +65,5 @@
         WHERE id = #{id}
     </update>
     
-    <!-- 增加评论点赞数 -->
-    <update id="incrementLikes">
-        UPDATE comment
-        SET likes = likes + 1, update_time = NOW()
-        WHERE id = #{id}
-    </update>
-    
-    <!-- 减少评论点赞数 -->
-    <update id="decrementLikes">
-        UPDATE comment
-        SET likes = GREATEST(0, likes - 1), update_time = NOW()
-        WHERE id = #{id}
-    </update>
-    
+
 </mapper> 

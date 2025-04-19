@@ -141,36 +141,7 @@ public class UpLoadVideoController {
             return ResponseResult.error("封面上传失败: " + e.getMessage());
         }
     }
-    
-    /**
-     * 保存视频信息
-     * @param video 视频信息
-     * @param request HTTP请求
-     * @return 保存结果
-     */
-    @PostMapping("/save")
-    public ResponseResult<Video> saveVideo(@RequestBody Video video, HttpServletRequest request) {
-        // 从请求属性中获取用户信息（由JWT拦截器设置）
-        User user = (User) request.getAttribute("user");
-        
-        // 设置视频上传者
-        video.setUserId(user.getId());
-        video.setUploaderName(user.getNickname() != null ? user.getNickname() : user.getUsername());
-        
-        // 设置创建时间
-        video.setCreateTime(LocalDateTime.now());
-        
-        // 设置初始数据
-        video.setViews(0);
-        video.setLikes(0);
-        // 状态设置为2表示审核中
-        video.setStatus(2);
-        
-        // 保存到草稿视频表（待审核）
-        Video savedVideo = videoService.saveToDraftVideo(video);
-        
-        return ResponseResult.success(savedVideo);
-    }
+
     
     /**
      * 获取当前用户的视频列表

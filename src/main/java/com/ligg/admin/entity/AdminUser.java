@@ -34,11 +34,6 @@ public class AdminUser {
     private String avatar;
     
     /**
-     * 状态：0-禁用，1-启用
-     */
-    private Integer status;
-    
-    /**
      * 最后登录时间
      */
     private LocalDateTime lastLoginTime;

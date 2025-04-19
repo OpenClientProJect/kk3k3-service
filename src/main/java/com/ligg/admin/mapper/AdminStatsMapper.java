@@ -24,12 +24,7 @@ public interface AdminStatsMapper {
      */
     int getTotalUsers();
     
-    /**
-     * 获取待审核视频数量
-     *
-     * @return 待审核视频数量
-     */
-    int getPendingVideos();
+
     
     /**
      * 获取今日新增视频数
@@ -66,13 +61,7 @@ public interface AdminStatsMapper {
      */
     List<Map<String, Object>> getVideoCategoryStats();
     
-    /**
-     * 获取最活跃的TOP 10用户
-     *
-     * @return 最活跃用户列表
-     */
-    List<Map<String, Object>> getTopActiveUsers();
-    
+
     /**
      * 获取最热门的TOP 10视频
      *

@@ -2,30 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ligg.admin.mapper.AdminVideoMapper">
 
-    <!-- 获取待审核视频 -->
-    <select id="selectPendingVideos" resultType="java.util.HashMap">
-        SELECT
-            id, title, description, video_path as videoPath, video_url as videoUrl,
-            cover_path as coverPath, cover_url as coverUrl, duration, category,
-            user_id as userId, uploader_name as uploaderName, views, likes,
-            status, create_time as createTime, update_time as updateTime, tags
-        FROM
-            draft_video
-        WHERE
-            status = 2
-        ORDER BY
-            create_time DESC
-        LIMIT #{offset}, #{limit}
-    </select>
-
-    <!-- 统计待审核视频数量 -->
-    <select id="countPendingVideos" resultType="int">
-        SELECT COUNT(*) FROM draft_video WHERE status = 2
-    </select>
-
-    <!-- 获取所有视频 -->
-
-
     <!-- 统计符合条件的视频数量 -->
     <select id="countAllVideos" resultType="int">
         <if test="status == null or status == ''">
@@ -70,9 +46,7 @@
         SELECT
             v.id, v.title, v.description, v.video_path as videoPath, v.video_url as videoUrl,
             v.cover_path as coverPath, v.cover_url as coverUrl, v.duration, v.category,
-            v.user_id as userId, v.uploader_name as uploaderName, v.views, v.likes,
-            v.status, v.create_time as createTime, v.update_time as updateTime, v.tags,
-            u.username, u.avatar_url as avatarUrl, u.nickname
+            v.create_time as createTime, v.update_time as updateTime, v.tags
         FROM
             (
                 SELECT 
@@ -85,38 +59,11 @@
                     cover_url COLLATE utf8mb4_general_ci as cover_url,
                     duration,
                     category COLLATE utf8mb4_general_ci as category,
-                    user_id,
-                    uploader_name COLLATE utf8mb4_general_ci as uploader_name,
-                    views,
-                    likes,
-                    status,
                     create_time,
                     update_time,
                     tags COLLATE utf8mb4_general_ci as tags
                 FROM video WHERE id = #{id}
-                UNION ALL
-                SELECT 
-                    id,
-                    title COLLATE utf8mb4_general_ci as title,
-                    description COLLATE utf8mb4_general_ci as description,
-                    video_path COLLATE utf8mb4_general_ci as video_path,
-                    video_url COLLATE utf8mb4_general_ci as video_url,
-                    cover_path COLLATE utf8mb4_general_ci as cover_path,
-                    cover_url COLLATE utf8mb4_general_ci as cover_url,
-                    duration,
-                    category COLLATE utf8mb4_general_ci as category,
-                    user_id,
-                    uploader_name COLLATE utf8mb4_general_ci as uploader_name,
-                    views,
-                    likes,
-                    status,
-                    create_time,
-                    update_time,
-                    tags COLLATE utf8mb4_general_ci as tags
-                FROM draft_video WHERE id = #{id}
             ) v
-        LEFT JOIN
-            user u ON v.user_id = u.id
         LIMIT 1
     </select>
     <select id="selectAllVideos" resultType="java.util.Map">
@@ -137,22 +84,7 @@
             id = #{id}
     </update>
 
-    <!-- 将通过审核的草稿视频移动到正式视频表 -->
-    <insert id="moveDraftToVideo">
-        INSERT INTO video (
-            title, description, video_path, video_url, cover_path, cover_url,
-            duration, category, user_id, uploader_name, views, likes,
-            status, create_time, update_time, tags
-        )
-        SELECT
-            title, description, video_path, video_url, cover_path, cover_url,
-            duration, category, user_id, uploader_name, views, likes,
-            status, create_time, update_time, tags
-        FROM
-            draft_video
-        WHERE
-            id = #{id}
-    </insert>
+
     <!-- 插入视频 -->
     <insert id="insert">
         insert into video(title,description,video_path,video_url,cover_path,cover_url,
@@ -166,9 +98,5 @@
         DELETE FROM video WHERE id = #{id}
     </delete>
 
-    <!-- 删除草稿视频 -->
-    <delete id="deleteDraftVideo">
-        DELETE FROM draft_video WHERE id = #{id}
-    </delete>
 
 </mapper> 

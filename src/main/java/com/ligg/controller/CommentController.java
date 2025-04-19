@@ -115,48 +115,4 @@ public class CommentController {
             return ResponseResult.error("删除评论失败，可能无权限或评论不存在");
         }
     }
-    
-    /**
-     * 点赞评论
-     * @param commentId 评论ID
-     * @param request HTTP请求
-     * @return 点赞结果
-     */
-    @PostMapping("/{commentId}/like")
-    public ResponseResult<String> likeComment(@PathVariable Long commentId, jakarta.servlet.http.HttpServletRequest request) {
-        User currentUser = (User) request.getAttribute("user");
-        if (currentUser == null) {
-            return ResponseResult.error(401, "未登录");
-        }
-        
-        boolean success = commentService.likeComment(commentId, currentUser.getId());
-        
-        if (success) {
-            return ResponseResult.success("点赞成功");
-        } else {
-            return ResponseResult.error("已点赞");
-        }
-    }
-    
-    /**
-     * 取消点赞评论
-     * @param commentId 评论ID
-     * @param request HTTP请求
-     * @return 取消点赞结果
-     */
-    @PostMapping("/{commentId}/unlike")
-    public ResponseResult<String> unlikeComment(@PathVariable Long commentId, jakarta.servlet.http.HttpServletRequest request) {
-        User currentUser = (User) request.getAttribute("user");
-        if (currentUser == null) {
-            return ResponseResult.error(401, "未登录");
-        }
-        
-        boolean success = commentService.unlikeComment(commentId, currentUser.getId());
-        
-        if (success) {
-            return ResponseResult.success("取消点赞成功");
-        } else {
-            return ResponseResult.error("取消点赞失败，可能未点赞或评论不存在");
-        }
-    }
-} 
+}

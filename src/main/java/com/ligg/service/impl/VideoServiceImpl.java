@@ -24,52 +24,7 @@ public class VideoServiceImpl implements VideoService {
     @Autowired
     private VideoMapper videoMapper;
     
-    @Autowired
-    private DraftVideoMapper draftVideoMapper;
-    
-    @Autowired
-    private UserMapper userMapper;
 
-    @Override
-    @Transactional
-    public Video saveVideo(Video video) {
-        // 如果是新视频，设置创建时间
-        if (video.getId() == null) {
-            video.setCreateTime(LocalDateTime.now());
-            // 更新时间
-            video.setUpdateTime(LocalDateTime.now());
-            // 执行插入
-            videoMapper.insert(video);
-        } else {
-            // 更新时间
-            video.setUpdateTime(LocalDateTime.now());
-            // 执行更新
-            videoMapper.update(video);
-        }
-        
-        return video;
-    }
-    
-    @Override
-    @Transactional
-    public Video saveToDraftVideo(Video video) {
-        // 如果是新视频，设置创建时间
-        if (video.getId() == null) {
-            video.setCreateTime(LocalDateTime.now());
-            // 更新时间
-            video.setUpdateTime(LocalDateTime.now());
-            // 执行插入到草稿表
-            draftVideoMapper.insert(video);
-        } else {
-            // 更新时间
-            video.setUpdateTime(LocalDateTime.now());
-            // 执行更新草稿表
-            draftVideoMapper.update(video);
-        }
-
-        return video;
-    }
-    
     @Override
     public HashMap<String, Object> getVideoById(Long id) {
         HashMap<String, Object> videoInfoMap = new HashMap<>();
@@ -78,22 +33,13 @@ public class VideoServiceImpl implements VideoService {
         return videoInfoMap;
     }
     
-    @Override
-    public List<Video> getVideosByUserId(Long userId, int offset, int limit) {
-        return videoMapper.selectByUserId(userId);
-    }
-    
+
     @Override
     public List<Video> getAllVideosByUserId(Long userId) {
         // 获取正式视频
         return videoMapper.selectByUserId(userId);
     }
-    
-    @Override
-    public int countVideosByUserId(Long userId) {
-        return videoMapper.countByUserId(userId);
-    }
-    
+
     @Override
     public int countAllVideosByUserId(Long userId) {
         // 正式视频数量
@@ -109,10 +55,7 @@ public class VideoServiceImpl implements VideoService {
         return videoMapper.deleteById(id) > 0;
     }
 
-    @Override
-    public List<Video> getVideosByCategory(String category, int offset, int limit) {
-        return videoMapper.selectByCategory(category, 1, offset, limit);
-    }
+
     
     @Override
     public List<Video> getLatestVideos() {
@@ -125,16 +68,7 @@ public class VideoServiceImpl implements VideoService {
         return videoMapper.searchByKeyword(keyword, 1, offset, limit);
     }
     
-    @Override
-    public int countVideos() {
-        return videoMapper.countByStatus(1);
-    }
 
-    @Override
-    public int countVideosByCategory(String category) {
-        return videoMapper.countByCategory(category, 1);
-    }
-    
     @Override
     public int countSearchResults(String keyword) {
         return videoMapper.countSearchResult(keyword, 1);

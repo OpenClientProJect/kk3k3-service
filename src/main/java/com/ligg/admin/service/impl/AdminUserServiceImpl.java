@@ -2,9 +2,7 @@ package com.ligg.admin.service.impl;
 
 import com.ligg.admin.dto.AdminInfoDTO;
 import com.ligg.admin.dto.AdminLoginDTO;
-import com.ligg.admin.entity.AdminLog;
 import com.ligg.admin.entity.AdminUser;
-import com.ligg.admin.mapper.AdminLogMapper;
 import com.ligg.admin.mapper.AdminUserMapper;
 import com.ligg.admin.service.AdminUserService;
 import com.ligg.admin.utils.JwtUtils;
@@ -22,9 +20,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Autowired
     private AdminUserMapper adminUserMapper;
     
-    @Autowired
-    private AdminLogMapper adminLogMapper;
-    
+
     @Autowired
     private JwtUtils jwtUtils;
 
@@ -39,11 +35,6 @@ public class AdminUserServiceImpl implements AdminUserService {
         
         // 校验密码（使用MD5加密）
         if (!MD5Utils.verify(loginDTO.getPassword(), admin.getPassword())) {
-            return null;
-        }
-        
-        // 检查账号状态
-        if (admin.getStatus() != 1) {
             return null;
         }
         
