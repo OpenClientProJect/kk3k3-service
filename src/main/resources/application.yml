@@ -1,5 +1,8 @@
 server:
   port: 8080
+  tomcat:
+    connection-timeout: 120000  # 120秒连接超时
+    max-http-form-post-size: 5000MB  # 与multipart配置保持一致
 
 spring:
   datasource:
@@ -24,6 +27,13 @@ spring:
     multipart:
       max-file-size: 5000MB
       max-request-size: 5000MB
+      # 启用解析失败时的容错处理
+      resolve-lazily: true
+      # 设置临时存储目录
+      location: /tmp
+  mvc:
+    servlet:
+      load-on-startup: 1  # 确保Servlet立即初始化
 
 # MyBatis配置
 mybatis:
