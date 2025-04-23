@@ -20,14 +20,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
     
     @Value("${upload.path}")
     private String uploadPath;
-
+    @Value("${ip.url}")
+    private String ipUrl;
     /**
      * 跨域配置
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOriginPatterns("*")
+        registry.addMapping("/**") //
+                .allowedOriginPatterns(ipUrl) // 允许跨域的域名，可以用*表示允许任何域名使用
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)

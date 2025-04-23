@@ -48,6 +48,6 @@ public class MD5Utils {
     }
 
     public static void main(String[] args) {
-        System.out.printf(MD5Utils.encrypt("123456"));
+        System.out.printf(MD5Utils.encrypt("1111111"));
     }
 } 

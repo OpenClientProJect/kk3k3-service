@@ -181,7 +181,7 @@ public class UserController {
             Files.write(path, file.getBytes());
 
             // 构建访问URL
-            String baseUrl = "http://localhost:" + serverPort;
+            String baseUrl = "http://154.40.44.245:" + serverPort;
             String avatarUrl = baseUrl + "/images/" + relativePath;
             
             log.info("头像已上传，URL: {}", avatarUrl);
