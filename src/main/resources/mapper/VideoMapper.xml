@@ -12,7 +12,7 @@
 
     <!-- 根据ID查询视频 -->
     <select id="selectById" resultType="com.ligg.entity.Video">
-        SELECT *
+        SELECT id, title, description, category,cover_url, create_time, update_time, tags
         FROM video
         WHERE id = #{id}
     </select>
@@ -53,5 +53,12 @@
         select *
         from video
         where title like concat('%', #{keyword}, '%') or description like concat('%', #{keyword}, '%')
+    </select>
+
+    <!--剧集-->
+    <select id="getEpisodes" resultType="com.ligg.entity.Episodes">
+        select *
+        from episodes
+        where video_id = #{id}
     </select>
 </mapper> 

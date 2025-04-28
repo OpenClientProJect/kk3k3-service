@@ -147,11 +147,6 @@ public class UploadVideoController {
         // 从请求属性中获取用户信息（由JWT拦截器设置）
 
 
-        // 设置初始数据
-        video.setViews(0);
-        video.setLikes(0);
-        // 状态设置为2表示审核中
-        video.setStatus(2);
 
         // 保存视频
         Video savedVideo = adminVideoService.saveVideo(video);

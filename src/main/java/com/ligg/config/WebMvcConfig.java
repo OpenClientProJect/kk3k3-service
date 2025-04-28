@@ -28,7 +28,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") //
-                .allowedOriginPatterns(ipUrl) // 允许跨域的域名，可以用*表示允许任何域名使用
+                .allowedOriginPatterns("*") // 允许跨域的域名，可以用*表示允许任何域名使用
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)

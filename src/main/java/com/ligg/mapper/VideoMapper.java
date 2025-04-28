@@ -1,5 +1,6 @@
 package com.ligg.mapper;
 
+import com.ligg.entity.Episodes;
 import com.ligg.entity.Video;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -53,4 +54,5 @@ public interface VideoMapper {
      */
     int countSearchResult(@Param("keyword") String keyword, @Param("status") Integer status);
 
+    List<Episodes> getEpisodes(Long id);
 }

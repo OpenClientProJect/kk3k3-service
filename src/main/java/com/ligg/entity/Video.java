@@ -23,27 +23,12 @@ public class Video {
      * 视频描述
      */
     private String description;
-    
+
     /**
-     * 视频文件路径（相对路径）
-     */
-    private String videoPath;
-    
-    /**
-     * 视频访问URL
-     */
-    private String videoUrl;
-    
-    /**
-     * 视频封面路径（相对路径）
-     */
-    private String coverPath;
-    
-    /**
-     * 视频封面URL
+     * 封面URL
      */
     private String coverUrl;
-    
+
     /**
      * 视频时长（秒）
      */
@@ -53,31 +38,6 @@ public class Video {
      * 视频类别
      */
     private String category;
-    
-    /**
-     * 上传者ID
-     */
-    private Long userId;
-    
-    /**
-     * 上传者名称
-     */
-    private String uploaderName;
-    
-    /**
-     * 播放次数
-     */
-    private Integer views;
-    
-    /**
-     * 点赞数
-     */
-    private Integer likes;
-    
-    /**
-     * 视频状态：0-处理中，1-正常，2-审核中，3-已下架
-     */
-    private Integer status;
     
     /**
      * 创建时间

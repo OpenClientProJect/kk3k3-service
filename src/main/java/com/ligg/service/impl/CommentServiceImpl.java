@@ -121,16 +121,6 @@ public class CommentServiceImpl implements CommentService {
             return false;
         }
         
-        // 检查是否有权限删除（评论作者或视频作者）
-        if (!comment.getUserId().equals(currentUserId)) {
-            // 如果不是评论作者，检查是否是视频作者
-            Video video = videoMapper.selectById(comment.getVideoId());
-            if (video == null || !video.getUserId().equals(currentUserId)) {
-                log.warn("用户无权删除此评论, commentId={}, userId={}", commentId, currentUserId);
-                return false;
-            }
-        }
-        
         // 逻辑删除评论
         return commentMapper.delete(commentId) > 0;
     }

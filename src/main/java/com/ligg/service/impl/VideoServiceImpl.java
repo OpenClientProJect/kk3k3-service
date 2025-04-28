@@ -1,5 +1,6 @@
 package com.ligg.service.impl;
 
+import com.ligg.entity.Episodes;
 import com.ligg.entity.Video;
 import com.ligg.mapper.VideoMapper;
 import com.ligg.service.VideoService;
@@ -25,6 +26,8 @@ public class VideoServiceImpl implements VideoService {
         HashMap<String, Object> videoInfoMap = new HashMap<>();
         Video video = videoMapper.selectById(id);
         videoInfoMap.put("video", video);
+        List<Episodes> episodes = videoMapper.getEpisodes(id);
+        videoInfoMap.put("episodes", episodes);
         return videoInfoMap;
     }
     
