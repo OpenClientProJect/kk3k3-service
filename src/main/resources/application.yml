@@ -7,9 +7,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://154.40.44.245:3306/kk3k3_fun?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
-    username: kk3k3_fun
-    password: 123456
+    url: jdbc:mysql://127.0.0.1:3306/kk3k3_fun?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 200309
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -68,7 +68,7 @@ video:
     path: /www/video/resource/covers
   # 视频访问URL前缀
   access:
-    url: http://154.40.44.245:8080/videos
+    url: http://127.0.0.1:8080/videos
 
 admin:
   jwt:

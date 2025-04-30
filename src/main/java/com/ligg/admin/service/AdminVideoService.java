@@ -11,9 +11,7 @@ public interface AdminVideoService {
 
 
     /**
-     * 将视频信息保存到草稿视频表（待审核）
-     * @param video 视频对象
-     * @return 保存后的视频对象
+     * 保持视频信息
      */
     Video saveVideo(Video video);
 

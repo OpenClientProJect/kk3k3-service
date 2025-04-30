@@ -71,12 +71,10 @@
         from video
     </select>
 
-    <!-- 插入视频 -->
+    <!-- 插入视频内容 -->
     <insert id="insert">
-        insert into video(title,description,video_path,video_url,cover_path,cover_url,
-                          duration,category,tags,create_time,update_time)
-        values(#{title},#{description},#{videoPath},#{videoUrl},#{coverPath},#{coverUrl},
-              #{duration},#{category},#{tags},NOW(),NOW())
+        insert into video(title,description,duration,category,cover_url,tags,create_time,update_time)
+        values(#{title},#{description},#{duration},#{category},#{coverUrl},#{tags},NOW(),NOW())
     </insert>
 
     <!-- 删除视频 -->

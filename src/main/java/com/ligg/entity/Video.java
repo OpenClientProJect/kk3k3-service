@@ -25,6 +25,21 @@ public class Video {
     private String description;
 
     /**
+     * 视频存储路径
+     */
+    private String videoPath;
+    
+    /**
+     * 视频访问URL
+     */
+    private String videoUrl;
+    
+    /**
+     * 封面存储路径
+     */
+    private String coverPath;
+    
+    /**
      * 封面URL
      */
     private String coverUrl;
