@@ -16,11 +16,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/api/admin/video")
@@ -37,6 +39,9 @@ public class UploadVideoController {
 
     @Value("${video.access.url}")
     private String videoAccessUrl;
+    
+    // 存储分片上传的临时信息
+    private static final Map<String, Map<String, Object>> CHUNK_INFO = new ConcurrentHashMap<>();
 
     /**
      * 上传视频文件
@@ -85,6 +90,173 @@ public class UploadVideoController {
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseResult.error("视频上传失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 初始化分片上传
+     * @param request 初始化请求
+     * @return 初始化结果
+     */
+    @PostMapping("/upload/init")
+    public ResponseResult<Map<String, Object>> initChunkUpload(@RequestBody Map<String, Object> request) {
+        try {
+            String fileName = (String) request.get("fileName");
+            long fileSize = Long.parseLong(request.get("fileSize").toString());
+            int chunkSize = Integer.parseInt(request.get("chunkSize").toString());
+            int totalChunks = Integer.parseInt(request.get("totalChunks").toString());
+            
+            // 生成上传ID
+            String uploadId = UUID.randomUUID().toString();
+            
+            // 按日期创建临时目录
+            String datePath = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+            String tempDirPath = videoUploadPath + "/temp/" + datePath + "/" + uploadId;
+            
+            // 确保临时目录存在
+            File tempDir = new File(tempDirPath);
+            if (!tempDir.exists()) {
+                tempDir.mkdirs();
+            }
+            
+            // 存储分片信息
+            Map<String, Object> uploadInfo = new HashMap<>();
+            uploadInfo.put("fileName", fileName);
+            uploadInfo.put("fileSize", fileSize);
+            uploadInfo.put("chunkSize", chunkSize);
+            uploadInfo.put("totalChunks", totalChunks);
+            uploadInfo.put("tempDir", tempDirPath);
+            uploadInfo.put("uploadedChunks", new ConcurrentHashMap<Integer, Boolean>());
+            uploadInfo.put("datePath", datePath);
+            
+            CHUNK_INFO.put(uploadId, uploadInfo);
+            
+            Map<String, Object> result = new HashMap<>();
+            result.put("uploadId", uploadId);
+            
+            return ResponseResult.success(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseResult.error("初始化分片上传失败: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * 上传视频分片
+     * @param chunk 分片文件
+     * @param index 分片索引
+     * @param uploadId 上传ID
+     * @param fileName 文件名
+     * @return 上传结果
+     */
+    @PostMapping("/upload/chunk")
+    public ResponseResult<Map<String, Object>> uploadChunk(
+            @RequestParam("chunk") MultipartFile chunk,
+            @RequestParam("index") int index,
+            @RequestParam("uploadId") String uploadId,
+            @RequestParam("fileName") String fileName) {
+        
+        try {
+            // 获取上传信息
+            Map<String, Object> uploadInfo = CHUNK_INFO.get(uploadId);
+            if (uploadInfo == null) {
+                return ResponseResult.error("无效的上传ID");
+            }
+            
+            String tempDir = (String) uploadInfo.get("tempDir");
+            int totalChunks = (int) uploadInfo.get("totalChunks");
+            
+            if (index >= totalChunks) {
+                return ResponseResult.error("无效的分片索引");
+            }
+            
+            // 保存分片文件
+            String chunkPath = tempDir + "/" + index;
+            Path path = Paths.get(chunkPath);
+            Files.write(path, chunk.getBytes());
+            
+            // 更新已上传分片信息
+            Map<Integer, Boolean> uploadedChunks = (Map<Integer, Boolean>) uploadInfo.get("uploadedChunks");
+            uploadedChunks.put(index, true);
+            
+            Map<String, Object> result = new HashMap<>();
+            result.put("uploaded", uploadedChunks.size());
+            result.put("total", totalChunks);
+            
+            return ResponseResult.success(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseResult.error("上传分片失败: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * 合并视频分片
+     * @param request 合并请求
+     * @return 合并结果
+     */
+    @PostMapping("/upload/merge")
+    public ResponseResult<Map<String, String>> mergeChunks(@RequestBody Map<String, Object> request) {
+        try {
+            String uploadId = (String) request.get("uploadId");
+            String fileName = (String) request.get("fileName");
+            int totalChunks = Integer.parseInt(request.get("totalChunks").toString());
+            
+            // 获取上传信息
+            Map<String, Object> uploadInfo = CHUNK_INFO.get(uploadId);
+            if (uploadInfo == null) {
+                return ResponseResult.error("无效的上传ID");
+            }
+            
+            String tempDir = (String) uploadInfo.get("tempDir");
+            Map<Integer, Boolean> uploadedChunks = (Map<Integer, Boolean>) uploadInfo.get("uploadedChunks");
+            
+            // 检查是否所有分片都已上传
+            if (uploadedChunks.size() != totalChunks) {
+                return ResponseResult.error("分片不完整，无法合并");
+            }
+            
+            // 生成最终文件名和路径
+            String fileExtension = fileName.substring(fileName.lastIndexOf("."));
+            String newFileName = UUID.randomUUID().toString() + fileExtension;
+            String datePath = (String) uploadInfo.get("datePath");
+            String finalDirPath = videoUploadPath + "/" + datePath;
+            String relativePath = datePath + "/" + newFileName;
+            
+            // 确保目录存在
+            File finalDir = new File(finalDirPath);
+            if (!finalDir.exists()) {
+                finalDir.mkdirs();
+            }
+            
+            // 合并文件
+            Path targetPath = Paths.get(finalDirPath + "/" + newFileName);
+            Files.createFile(targetPath);
+            
+            for (int i = 0; i < totalChunks; i++) {
+                Path chunkPath = Paths.get(tempDir + "/" + i);
+                Files.write(targetPath, Files.readAllBytes(chunkPath), StandardOpenOption.APPEND);
+                
+                // 删除分片文件
+                Files.delete(chunkPath);
+            }
+            
+            // 删除临时目录
+            Files.delete(Paths.get(tempDir));
+            
+            // 清理上传信息
+            CHUNK_INFO.remove(uploadId);
+            
+            // 返回视频访问地址
+            Map<String, String> result = new HashMap<>();
+            result.put("videoUrl", videoAccessUrl + "/" + relativePath);
+            result.put("relativePath", relativePath);
+            
+            return ResponseResult.success(result);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseResult.error("合并分片失败: " + e.getMessage());
         }
     }
 
