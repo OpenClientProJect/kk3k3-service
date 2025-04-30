@@ -1,5 +1,6 @@
 package com.ligg.admin.mapper;
 
+import com.ligg.entity.Episodes;
 import com.ligg.entity.Video;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -53,4 +54,9 @@ public interface AdminVideoMapper {
      * @param video
      */
     void insert(Video video);
+
+    /**
+     * 插入视频剧集
+     */
+    void insertEpisode(Episodes episode);
 }

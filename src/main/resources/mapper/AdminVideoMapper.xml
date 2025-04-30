@@ -77,6 +77,24 @@
         values(#{title},#{description},#{duration},#{category},#{coverUrl},#{tags},NOW(),NOW())
     </insert>
 
+    <!-- 插入剧集 -->
+    <insert id="insertEpisode" parameterType="com.ligg.entity.Episodes">
+        insert into episodes(
+            episodes_title,
+            episodes_image,
+            episodes_video,
+            video_id,
+            create_time
+        )
+        values(
+            #{episodesTitle},
+            #{episodesImage},
+            #{episodesVideo},
+            #{videoId},
+            NOW()
+        )
+    </insert>
+
     <!-- 删除视频 -->
     <delete id="deleteVideo">
         DELETE FROM video WHERE id = #{id}

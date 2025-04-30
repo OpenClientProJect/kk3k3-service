@@ -2,6 +2,7 @@ package com.ligg.admin.service.impl;
 
 import com.ligg.admin.mapper.AdminVideoMapper;
 import com.ligg.admin.service.AdminVideoService;
+import com.ligg.entity.Episodes;
 import com.ligg.entity.Video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,4 +61,18 @@ public class AdminVideoServiceImpl implements AdminVideoService {
         int rows = adminVideoMapper.deleteVideo(id);
         return rows > 0;
     }
-} 
+
+//    @Override
+//    public void addEpisode(Episodes episode) {
+//        adminVideoMapper.insertEpisode(episode);
+//    }
+
+    /**
+     * 插入剧集
+     */
+    @Override
+    @Transactional
+    public void insertEpisode(Episodes episode) {
+        adminVideoMapper.insertEpisode(episode);
+    }
+}

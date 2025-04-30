@@ -1,6 +1,7 @@
 package com.ligg.admin.controller;
 
 import com.ligg.admin.service.AdminVideoService;
+import com.ligg.entity.Episodes;
 import com.ligg.entity.User;
 import com.ligg.entity.Video;
 import com.ligg.util.ResponseResult;
@@ -144,10 +145,6 @@ public class UploadVideoController {
      */
     @PostMapping("/save")
     public ResponseResult<Video> saveVideo(@RequestBody Video video) {
-        // 从请求属性中获取用户信息（由JWT拦截器设置）
-
-
-
         // 保存视频
         Video savedVideo = adminVideoService.saveVideo(video);
 
@@ -182,5 +179,18 @@ public class UploadVideoController {
             }
         }
         return false;
+    }
+
+    /**
+     * 添加剧集
+     * @param episode 剧集信息
+     * @return 保存结果
+     */
+    @PostMapping("/episode/add")
+    public ResponseResult<?> addEpisode(@RequestBody Episodes episode) {
+        // 保存剧集
+        adminVideoService.insertEpisode(episode);
+        
+        return ResponseResult.success("剧集添加成功");
     }
 }
