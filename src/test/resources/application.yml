@@ -1,12 +1,15 @@
 server:
-  port: 8080
+  port: 8081
+  tomcat:
+    connection-timeout: 120000  # 120秒连接超时
+    max-http-form-post-size: 5000MB  # 与multipart配置保持一致
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://154.40.44.245:3306/kk3k3_fun?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
-    username: kk3k3_fun
-    password: 123456
+    url: jdbc:mysql://127.0.0.1:3306/kk3k3_fun?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 200309
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -18,12 +21,19 @@ spring:
       database: 0
       timeout: 10000
       # 如果需要密码，取消注释下一行
-      # password: 
+      # password:
   # 文件上传配置
   servlet:
     multipart:
-      max-file-size: 5000MB
-      max-request-size: 5000MB
+      max-file-size: 10000MB
+      max-request-size: 10000MB
+      # 启用解析失败时的容错处理
+      resolve-lazily: true
+      # 设置临时存储目录
+      location: /tmp
+  mvc:
+    servlet:
+      load-on-startup: 1  # 确保Servlet立即初始化
 
 # MyBatis配置
 mybatis:
@@ -46,6 +56,7 @@ jwt:
 
 # 用户图片上传路径
 upload:
+  ip: http://127.0.0.1:8080
   path: /www/video/resource/images
 
 # 视频存储配置
@@ -58,7 +69,7 @@ video:
     path: /www/video/resource/covers
   # 视频访问URL前缀
   access:
-    url: http://154.40.44.245:8080/videos
+    url: http://127.0.0.1:8080/videos
 
 admin:
   jwt:
@@ -70,4 +81,4 @@ admin:
     issuer: play-video-admin
 #Ip
 ip:
-  url: http://154.40.44.245:4100,http://154.40.44.245:4000,http://localhost:4100,http://localhost:4000
+  url: http://154.40.44.245:4100,http://154.40.44.245:4000,http://localhost:4100
