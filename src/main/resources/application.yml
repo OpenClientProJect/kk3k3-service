@@ -25,8 +25,6 @@ spring:
   # 文件上传配置
   servlet:
     multipart:
-      max-file-size: 5000MB
-      max-request-size: 5000MB
       # 启用解析失败时的容错处理
       resolve-lazily: true
       # 设置临时存储目录
