@@ -25,6 +25,8 @@ spring:
   # 文件上传配置
   servlet:
     multipart:
+      max-file-size: 10000MB
+      max-request-size: 10000MB
       # 启用解析失败时的容错处理
       resolve-lazily: true
       # 设置临时存储目录
@@ -54,6 +56,7 @@ jwt:
 
 # 用户图片上传路径
 upload:
+  ip: http://127.0.0.1:8080
   path: /www/video/resource/images
 
 # 视频存储配置

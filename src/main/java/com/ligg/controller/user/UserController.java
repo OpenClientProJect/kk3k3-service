@@ -37,9 +37,11 @@ public class UserController {
 
     @Value("${upload.path}")
     private String uploadPath;
+
+    @Value("${upload.ip}")
+    private String uploadIp;
     
-    @Value("${server.port}")
-    private String serverPort;
+
 
     /**
      * 获取当前登录用户信息
@@ -181,8 +183,7 @@ public class UserController {
             Files.write(path, file.getBytes());
 
             // 构建访问URL
-            String baseUrl = "http://154.40.44.245:" + serverPort;
-            String avatarUrl = baseUrl + "/images/" + relativePath;
+            String avatarUrl = uploadIp + "/images/" + relativePath;
             
             log.info("头像已上传，URL: {}", avatarUrl);
             
