@@ -125,4 +125,10 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.delete(commentId) > 0;
     }
 
-} 
+    //获取评论获取消息
+    @Override
+    public List<Comment> getReplyMessages(Long id) {
+        List<Comment> Comment = commentMapper. getReplyMessages(id);
+        return Comment;
+    }
+}

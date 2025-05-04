@@ -64,6 +64,8 @@ public class Comment {
      * 用户头像URL（非数据库字段）
      */
     private String userAvatar;
+
+    private Integer replyToUserId;
     
     /**
      * 回复列表（非数据库字段）

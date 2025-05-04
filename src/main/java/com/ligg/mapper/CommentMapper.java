@@ -62,4 +62,6 @@ public interface CommentMapper {
      * @return 影响行数
      */
     int delete(Long id);
+    //获取评论回复消息
+    List<Comment> getReplyMessages(Long id);
 }

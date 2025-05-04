@@ -5,9 +5,9 @@
     <!-- 插入评论 -->
     <insert id="insert" parameterType="com.ligg.entity.Comment" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO comment (
-            video_id, user_id, content, parent_id, create_time, update_time
+            video_id, user_id, content, parent_id, create_time,reply_to_user_id, update_time
         ) VALUES (
-            #{videoId}, #{userId}, #{content}, #{parentId}, #{createTime}, #{updateTime}
+            #{videoId}, #{userId}, #{content}, #{parentId}, #{createTime},#{replyToUserId},#{updateTime}
         )
     </insert>
     
@@ -47,7 +47,15 @@
         FROM comment
         WHERE video_id = #{videoId} AND status = 1
     </select>
-    
+    <!--获取评论回复消息-->
+    <select id="getReplyMessages" resultType="com.ligg.entity.Comment">
+        SELECT c.id,c.reply_to_user_id,c.parent_id,c.content,u.username,u.avatar_url,u.nickname
+        FROM comment c
+                 LEFT JOIN
+             user u ON c.user_id = u.id
+        where user_id = #{id}
+    </select>
+
     <!-- 更新评论 -->
     <update id="update" parameterType="com.ligg.entity.Comment">
         UPDATE comment

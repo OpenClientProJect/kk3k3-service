@@ -40,6 +40,8 @@ public interface CommentService {
      * @return 删除结果
      */
     boolean deleteComment(Long commentId, Long currentUserId);
-    
 
-} 
+
+    // 获取评论回复
+    List<Comment> getReplyMessages(Long id);
+}

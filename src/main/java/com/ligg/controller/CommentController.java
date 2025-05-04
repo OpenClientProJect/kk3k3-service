@@ -4,10 +4,12 @@ import com.ligg.entity.Comment;
 import com.ligg.entity.User;
 import com.ligg.service.CommentService;
 import com.ligg.util.ResponseResult;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -114,5 +116,16 @@ public class CommentController {
         } else {
             return ResponseResult.error("删除评论失败，可能无权限或评论不存在");
         }
+    }
+
+    //获取评论回复消息
+    @GetMapping("/reply")
+    public ResponseResult<List<Comment>> getReplyMessages(HttpServletRequest request){
+        User userId = (User) request.getAttribute("user");
+        if (userId == null) {
+            return ResponseResult.error(401,"未登录");
+        }
+        List<Comment> replyMessages = commentService.getReplyMessages(userId.getId());
+        return ResponseResult.success(replyMessages);
     }
 }
