@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8080
   tomcat:
     connection-timeout: 120000  # 120秒连接超时
     max-http-form-post-size: 5000MB  # 与multipart配置保持一致
